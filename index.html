@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monthly Budget Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</head>
+<body>
+  <h1>Monthly Budget Tracker</h1>
+  <div class="container">
+    <h2 id="today-title"></h2>
+    <div class="input-group">
+      <input type="number" id="budget" value="500000" onchange="updateUI()" />
+    </div>
+    <div id="carryover-note"></div>
+    <p><strong>Total Balance:</strong> Rp <span id="total-net">0</span></p>
+    <p><strong>Remaining:</strong> Rp <span id="remaining">500.000</span></p>
+
+    <div class="input-group">
+      <input type="text" id="description" placeholder="Description" />
+    </div>
+    <div class="input-group">
+      <input type="number" id="amount" placeholder="Amount (Rp)" />
+    </div>
+    <div class="input-group">
+      <input type="date" id="date" />
+    </div>
+    <div class="input-group">
+      <select id="category">
+        <option value="food">🍔 Food</option>
+        <option value="transport">🚌 Transport</option>
+        <option value="entertainment">🎮 Entertainment</option>
+        <option value="shopping">🛍 Shopping</option>
+        <option value="other">📦 Other</option>
+      </select>
+    </div>
+    <button onclick="confirmAdd()">Add Expense</button>
+    <hr />
+    <div class="input-group">
+      <label for="month-filter">View Month:</label>
+      <select id="month-filter" onchange="updateUI()"></select>
+    </div>
+    <button onclick="exportToPDF()">Download PDF</button>
+    <button onclick="showCarryHistory()">📜 Carry Over History</button>
+    <hr />
+    <h3>Expense List</h3>
+    <ul id="expense-list"></ul>
+
+    <h3>Category Breakdown</h3>
+    <canvas id="categoryChart" width="400" height="200"></canvas>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirm-modal" class="modal">
+    <div class="modal-content">
+      <p>Are you sure you want to add this expense?</p>
+      <button onclick="addExpense()">Yes</button>
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Carry History Modal -->
+  <div id="history-modal" class="modal">
+    <div class="modal-content">
+      <h3>Carry Over History</h3>
+      <ul id="carry-list"></ul>
+      <button onclick="closeHistory()">Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
